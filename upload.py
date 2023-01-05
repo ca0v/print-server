@@ -49,11 +49,21 @@ def list_files():
 # return the contents of a file
 
 
-@app.route('/file/<filename>', methods=['GET'])
-def get_file(filename):
+@app.route('/file/<fileId>', methods=['GET', 'DELETE'])
+def get_file(fileId):
 
+    fileName = './upload/' + fileId
+
+    # if the request is a delete, then the user is requesting to delete the file
+    if request.method == 'DELETE':
+        # delete the file
+        os.remove(fileName)
+        return 'file deleted successfully'
+
+    # if the request is a get, then the user is requesting the file
+    # open the file in binary mode
     # r=>readonly, b=>binary
-    with open('./upload/' + filename, 'rb') as f:
+    with open(fileName, 'rb') as f:
         # write file as part of response
         response = app.make_response(f.read())
         # decorate the response as application/pdf

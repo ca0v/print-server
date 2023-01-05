@@ -3,5 +3,11 @@
 import os
 
 
-def print_file(file_path):
-    print(f"Get-Content -Path {file_path}.pdf | Out-Printer")
+def print_file(fileName):
+    print(f"print_file: {fileName}")
+    cmd = (f"Get-Content -Path {fileName} | Out-Printer")
+    print(cmd)
+
+    # run the command on windows powershell
+    #os.system(f'powershell.exe -Command {cmd}')
+    os.remove(fileName)
