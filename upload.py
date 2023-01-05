@@ -13,21 +13,9 @@ app = Flask(__name__)
 # the upload page
 
 
-@app.route('/')
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_form():
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
-
-
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
+    # if the request is a post, then the user has submitted the form
     if request.method == 'POST':
         # get the uploaded file
         f = request.files['file']
@@ -37,9 +25,40 @@ def upload_file():
         # create a file name based on the time
         filename = str(int(time.time()))
         print(filename)
+        # determine the file encoding
+        if (f.content_type != 'application/pdf'):
+            return 'file must be a pdf'
+
         # save the file
         f.save('./upload/' + filename)
         return 'file uploaded successfully'
+    # if the request is a get, then the user is requesting the form
+    else:
+        # set the content header
+        with open('./wwwroot/upload.html', 'r') as f:
+            return f.read()
+
+# return list of all files in the upload directory
+
+
+@app.route('/file', methods=['GET'])
+def list_files():
+    files = os.listdir('./upload')
+    return str(files)
+
+# return the contents of a file
+
+
+@app.route('/file/<filename>', methods=['GET'])
+def get_file(filename):
+
+    # r=>readonly, b=>binary
+    with open('./upload/' + filename, 'rb') as f:
+        # write file as part of response
+        response = app.make_response(f.read())
+        # decorate the response as application/pdf
+        response.headers['Content-Type'] = 'application/pdf'
+        return response
 
 
 if __name__ == '__main__':

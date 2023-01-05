@@ -2,9 +2,26 @@
 
 Our wireless printers never works with our iPhone, Android, Chromebook hodgepodge so I think print-to-pdf + file upload might be the way to go...
 
+## Architecture
+
+The system is made of of three distinct components:
+
+1. user devices (phone, chromebook)
+2. application (single page to upload a file, CRUD services) 
+3. printer server (polls application services for work)
+
+For learning purposes, this will use Vue
+
 * User presented with upload form
 * User uploads
+
+The app server will be implemented in Python
+
+* User presented with upload page
 * Upload is saved to server FS
+
+The printer server will be .NET 4.x to access printer
+
 * Process watches for file changes
-* Process prints the file (via updates a Power Shell script)
-* That's as much as I have...may I need a windows service
+* Process prints the file
+
