@@ -26,29 +26,29 @@ def download_files():
     for count, file in enumerate(data):
         print(f"downloading {file}...")
         response = requests.get(f"http://127.0.0.1:8080/file/{file}")
-        # safe the file
-        fileName = f"download/{file}"
+        # save the file
+        fileName = os.path.join("download", file)
         with open(fileName, "wb") as f:
             print(f"writing {fileName}")
             f.write(response.content)
             count = count + 1
 
 
-def remove_file(fileName):
-    file = fileName.split("/")[-1]
-    response = requests.delete(f"http://127.0.0.1:8080/file/{file}")
-    if (response.ok == False):
-        print(f"error deleting {file}")
-
-
 def print_files():
     # get all files that start with temp*
-    files = glob.glob("download/*")
-    # print the files
+    files = glob.glob(os.path.join("download", "*"))
     for file in files:
-        print_file(file)
-        # delete the file
-        remove_file(file)
+
+        # rename and print the file
+        filenameToPrint = os.path.join('printed', f'{file}.pdf')
+        os.replace(file, filenameToPrint)
+        print_file(filenameToPrint)
+
+        # delete the file on server
+        file = file.split("/")[-1].split("\\")[-1] # windows using \
+        response = requests.delete(f"http://127.0.0.1:8080/file/{file}")
+        if (response.ok == False):
+            print(f"error deleting {file}: {response}")
 
 
 if __name__ == "__main__":

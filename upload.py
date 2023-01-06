@@ -27,7 +27,7 @@ def upload_form():
         print(filename)
         # determine the file encoding
         if (f.content_type != 'application/pdf'):
-            return 'file must be a pdf'
+            return 'file type must be a application/pdf'
 
         # save the file
         f.save('./upload/' + filename)
