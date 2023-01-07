@@ -35,10 +35,11 @@ def download_files():
 
 
 def print_files():
+    print("print_files")
     # get all files that start with temp*
     files = glob.glob(os.path.join("download", "*"))
     for file in files:
-
+        print("printing file {file}")
         # rename and print the file
         filenameToPrint = os.path.join('printed', f'{file}.pdf')
         os.replace(file, filenameToPrint)
