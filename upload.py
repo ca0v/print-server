@@ -4,13 +4,14 @@ import os
 import sys
 import time
 
+if not os.path.exists("upload"):
+    os.mkdir("upload")
+
 # start a web service to listen on port 8080
 # and accept a file upload
 from flask import Flask, request
 
 app = Flask(__name__)
-
-# the upload page
 
 
 @app.route('/upload', methods=['GET', 'POST'])

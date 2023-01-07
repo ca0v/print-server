@@ -5,9 +5,27 @@ from printer import print_file
 
 import requests
 
+# create a download folder if it doesn't exist
+if not os.path.exists("download"):
+    os.mkdir("download")
+
+# create a printed folder if it doesn't exist
+if not os.path.exists("printed"):
+    os.mkdir("printed")
+    os.mkdir("printed/download")
+
+# read the server endpoint from the settings file
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
+UPLOAD_URL = config.get("servers", "upload_url")
+
 
 def download_files():
-    response = requests.get("http://127.0.0.1:8080/file")
+    response = requests.get(f"{UPLOAD_URL}/file")
+    if (response.ok == False):
+        print(f"error getting files: {response}")
+        return
     data = response.text
     if (data == "[]"):
         print("no files to download")
@@ -25,7 +43,7 @@ def download_files():
     # download the files
     for count, file in enumerate(data):
         print(f"downloading {file}...")
-        response = requests.get(f"http://127.0.0.1:8080/file/{file}")
+        response = requests.get(f"{UPLOAD_URL}/file/{file}")
         # save the file
         fileName = os.path.join("download", file)
         with open(fileName, "wb") as f:
@@ -46,7 +64,7 @@ def print_files():
         print_file(filenameToPrint)
 
         # delete the file on server
-        file = file.split("/")[-1].split("\\")[-1] # windows using \
+        file = file.split("/")[-1].split("\\")[-1]  # windows using \
         response = requests.delete(f"http://127.0.0.1:8080/file/{file}")
         if (response.ok == False):
             print(f"error deleting {file}: {response}")

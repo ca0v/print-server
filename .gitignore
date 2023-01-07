@@ -1,3 +1,4 @@
+*.ini
 node_modules
 __pycache__
 upload/
