@@ -72,5 +72,15 @@ def get_file(fileId):
         return response
 
 
+############################################
+# waitress-serve --port=5500 --call 'server:create_app'
+############################################
+
+
+def create_app():
+    return app
+
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
+    # start the server
+    create_app().run(debug=True, host='localhost', port=8080)
