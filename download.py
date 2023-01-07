@@ -65,7 +65,7 @@ def print_files():
 
         # delete the file on server
         file = file.split("/")[-1].split("\\")[-1]  # windows using \
-        response = requests.delete(f"http://127.0.0.1:8080/file/{file}")
+        response = requests.delete(f"{UPLOAD_URL}/file/{file}")
         if (response.ok == False):
             print(f"error deleting {file}: {response}")
 
