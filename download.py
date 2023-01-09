@@ -72,11 +72,14 @@ def print_files():
 
 if __name__ == "__main__":
     while True:
+        # print current time
+        import datetime
+        print(datetime.datetime.now())
         print("downloading files...")
         try:
             download_files()
             print_files()
-            sleep(5)
+            sleep(15)
         except Exception as e:
             print(e)
-            sleep(30)
+            sleep(60)
