@@ -25,3 +25,6 @@ The printer server will be .NET 4.x to access printer
 * Process watches for file changes
 * Process prints the file
 
+## References
+
+[How I got puppeteer working in M1](https://rickynguyen.medium.com/puppeteer-for-apple-m1-43a5c31e4f9d)

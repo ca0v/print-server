@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ca0v/print-server#readme",
   "dependencies": {
-    "pdf-to-printer": "^5.4.0"
+    "pdf-to-printer": "^5.4.0",
+    "puppeteer": "^18.2.1"
   }
 }
