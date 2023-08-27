@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ssh//": "ssh root@ca0v.us",
+    "upload-to-do": "push changes to digital ocean",
+    "upload-to-do//": "push changes to digital ocean"
   },
   "repository": {
     "type": "git",
