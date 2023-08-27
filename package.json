@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "ssh//": "ssh root@ca0v.us",
-    "upload-to-do": "push changes to digital ocean",
-    "upload-to-do//": "push changes to digital ocean"
+    "ssh": "ssh ca@ca0v.us",
+    "upload": "push changes to digital ocean",
+    "start": "waitress-serve --port=5510 --call upload:create_app"
   },
   "repository": {
     "type": "git",

@@ -43,9 +43,95 @@ To ssh to digital ocean, you need to add your ssh key to the droplet.  See [this
 - I used the digital ocean console to ssh to the droplet from the browser and pasted the public key to the end of the `~/.ssh/authorized_keys` (root user).
 - I was then able to ssh to the droplet from my mac with `ssh root@<ip address>`, which prompted for my passphrase and then logged me in.
 
-## Digital Ocean Setup (2)
+Once I obtained ssh access, I could `su` to my dev account, via `su ca` and then `cd /home/ca/code/print-server`.
 
-Once I obtained ssh access, I could `su` to my dev account, but I can no remember where I put the actual code!
+The `start` script starts on port 5510 and nginx is configured to forward to 5510.  To ensure this app runs after a system reboot I ran `sudo systemctl enable /home/ca/code/print-server/print-server.service`.
+
+Where `print-server.service` is:
+
+``` 
+[Unit]
+Description=Print Server Upload API
+
+[Service]
+WorkingDirectory=/home/ca/code/print-server
+User=ca
+ExecStart=/home/ca/code/print-server/start.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Nginx
+
+I installed nginx on the droplet with `sudo apt install nginx`.  I then configured it to forward to this app my modifying `/etc/nginx/sites-enabled/ca0v.us` with the following config (look for 5510 below):
+
+```
+server {
+
+        root /var/www/ca0v.us/html/ca0v/;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name ca0v.us www.ca0v.us;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+	location /stories/ {
+		rewrite ^(/stories/)$ $1/ last;
+		proxy_pass http://localhost:5500/;
+	}
+
+	location /stories/svelte-lab/ {
+		rewrite ^(/stories/svelte-lab/)$ $1/ last;
+		proxy_pass http://localhost:5500/static/svelte-lab/;
+	}
+
+	location /about/ {
+		proxy_pass https://ca0v.github.io/ca0v/;
+	}
+
+	location /printer/ {
+		proxy_pass http://localhost:5510/;
+	}
+
+        location /aiq/ {
+                proxy_pass http://localhost:3003/aiq/;
+        }
+
+	location /chat/ {
+		proxy_pass http://localhost:3000/chat/;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+	}
+
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/ca0v.us/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/ca0v.us/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    if ($host = ca0v.us) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen 80;
+        listen [::]:80;
+
+        server_name ca0v.us www.ca0v.us;
+    return 404; # managed by Certbot
+
+}
+```
+
+To start nginx, I ran `sudo systemctl start nginx`.  To restart, I ran `sudo systemctl restart nginx`.  To stop, I ran `sudo systemctl stop nginx`.
 
 ## References
 
