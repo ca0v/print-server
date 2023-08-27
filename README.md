@@ -49,4 +49,5 @@ Once I obtained ssh access, I could `su` to my dev account, but I can no remembe
 
 ## References
 
-[How I got puppeteer working in M1](https://rickynguyen.medium.com/puppeteer-for-apple-m1-43a5c31e4f9d)
+* [How I got puppeteer working in M1](https://rickynguyen.medium.com/puppeteer-for-apple-m1-43a5c31e4f9d)
+* [Large Uploads](https://stackoverflow.com/questions/18121227/how-to-avoid-request-entity-too-large-413-error)
